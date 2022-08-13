@@ -2,7 +2,12 @@
   "name": "particles",
   "version": "1.0.0",
   "main": "app.js",
+  "source": "index.html",
   "license": "MIT",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
   "devDependencies": {
     "@parcel/transformer-glsl": "2.7.0",
     "parcel": "^2.7.0"
