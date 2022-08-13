@@ -1,0 +1,15 @@
+{
+  "name": "particles",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@parcel/transformer-glsl": "2.7.0",
+    "parcel": "^2.7.0"
+  },
+  "dependencies": {
+    "gsap": "^3.10.4",
+    "three": "^0.143.0",
+    "three-orbit-controls": "^82.1.0"
+  }
+}
