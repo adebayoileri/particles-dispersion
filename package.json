@@ -1,7 +1,7 @@
 {
   "name": "particles",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.html",
   "source": "index.html",
   "license": "MIT",
   "scripts": {
