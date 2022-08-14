@@ -3,6 +3,7 @@ import fragmentShader from "./shaders/frament.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 // let OrbitControls = require('three-orbit-controls')(THREE)
 // init
+import * as dat from 'dat.gui'
 import gsap from 'gsap'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import mask from "./img/particle_mask.jpg";
@@ -21,7 +22,6 @@ export default class Sketch {
     this.camera.position.z = 1000;
 
     this.scene = new THREE.Scene();
-
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -46,6 +46,7 @@ export default class Sketch {
     this.addMesh();
 
     this.mouseEffect();
+    this.settings()
 
     this.render();
   }
@@ -55,14 +56,13 @@ export default class Sketch {
     let next = Math.floor(this.move + 40)%2;
     let prev = (Math.floor(this.move)+ 1 + 40)%2;
 
-    this.animation();
     this.material.uniforms.t1.value = this.textures[prev];
     this.material.uniforms.t3.value = this.textures[next+1];
 
     this.material.uniforms.time.value = this.time;
     this.material.uniforms.move.value = this.move;
     this.material.uniforms.mouse.value = this.point;
-    this.material.uniforms.transition.value = 1;
+    this.material.uniforms.transition.value = this.settings.progress;
 
 
 
@@ -76,25 +76,32 @@ export default class Sketch {
       new THREE.MeshBasicMaterial()
     );
 
-    window.addEventListener("mousedown", (e) => {
+    const startEffect = (e) => {
       gsap.to(this.material.uniforms.mousePressed, {
         duration:1,
         value: 1,
         ease: "elastic.out(1,0.3)"
       })
-    });
+    }
 
-    window.addEventListener("mouseup", (e) => {
+    const endEffect =  (e) => {
       gsap.to(this.material.uniforms.mousePressed, {
         duration: 1,
         value: 0,
         ease: "elastic.out(1,0.3)"
       })
-    });
+    }
+
+    window.addEventListener("mousedown",startEffect );
+    window.addEventListener("touchstart",startEffect );
+
+
+    window.addEventListener("mouseup", endEffect);
+    window.addEventListener("touchend",startEffect );
+
 
 
     window.addEventListener("mousewheel", (e) => {
-      // console.log(e.wheelDeltaY);
       this.move += e.wheelDeltaY / 4000;
     });
 
@@ -112,20 +119,9 @@ export default class Sketch {
         console.log(intersects[0].point);
         this.point.x = intersects[0].point.x;
         this.point.y = intersects[0].point.y;
-
-        // for ( let i = 0; i < this.intersects.length; i ++ ) {
-
-        // 	this.intersects[ i ].object.material.color.set( 0xff0000 );
-
-        // }
       },
       false
     );
-  }
-  animation() {
-    // this.controls.update()
-    // this.mesh.rotation.x = this.time / 200;
-    // this.mesh.rotation.y = this.time / 100;
   }
 
   addMesh() {
@@ -195,6 +191,15 @@ export default class Sketch {
     });
     this.mesh = new THREE.Points(this.geometry, this.material);
     this.scene.add(this.mesh);
+  }
+
+  settings(){
+    let that = this;
+    this.settings = {
+      progress: 1
+    }
+    this.gui = new dat.GUI();
+    this.gui.add(this.settings, 'progress').min(0).max(1).step(0.01);
   }
 }
 
