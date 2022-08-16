@@ -97,7 +97,7 @@ export default class Sketch {
 
 
     window.addEventListener("mouseup", endEffect);
-    window.addEventListener("touchend",startEffect );
+    window.addEventListener("touchend", endEffect);
 
 
 
