@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows: ["start"]
-    branches: ["develop"]
+    branches: ["main"]
     types:
       - completed
 
